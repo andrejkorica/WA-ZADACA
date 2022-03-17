@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <card v-for = "commits in commits" :key="commits.sha" :details = "commits.commit.message" :id = "commits.sha"/>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import axios from 'axios'
+import card from '@/components/cards.vue'
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    card,
+  },
+  data(){
+    return{
+      commits: []
+    }
+  },
+  async mounted(){
+    const neka = await axios.get("https://api.github.com/repos/vuejs/vue/commits")
+    this.commits = neka.data
+    console.log(this.commits)
   }
+
 }
 </script>
